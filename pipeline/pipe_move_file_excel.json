@@ -51,7 +51,7 @@
 						"referenceName": "ds_generico_excel",
 						"type": "DatasetReference",
 						"parameters": {
-							"fileName": "*.xlsx",
+							"fileName": "excelfiles",
 							"fileSeparator": ";"
 						}
 					}
