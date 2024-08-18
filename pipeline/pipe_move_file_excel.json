@@ -3,7 +3,7 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Copiar File",
+				"name": "Copiar XLSX to CSV",
 				"type": "Copy",
 				"dependsOn": [],
 				"policy": {
