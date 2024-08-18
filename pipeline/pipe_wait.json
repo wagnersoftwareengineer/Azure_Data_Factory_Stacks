@@ -1,0 +1,106 @@
+{
+	"name": "pipe_wait",
+	"properties": {
+		"activities": [
+			{
+				"name": "esperar_10_segundos",
+				"type": "Wait",
+				"dependsOn": [
+					{
+						"activity": "metadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 10
+				}
+			},
+			{
+				"name": "Lookup_CSV",
+				"type": "Lookup",
+				"dependsOn": [
+					{
+						"activity": "esperar_10_segundos",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "DelimitedTextSource",
+						"storeSettings": {
+							"type": "AzureBlobFSReadSettings",
+							"recursive": true,
+							"enablePartitionDiscovery": false
+						},
+						"formatSettings": {
+							"type": "DelimitedTextReadSettings"
+						}
+					},
+					"dataset": {
+						"referenceName": "ds_generico_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"containerName": "csvfiles",
+							"fileName": "csvCor.csv",
+							"separatorName": ";"
+						}
+					}
+				}
+			},
+			{
+				"name": "metadata",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_generico_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"containerName": "csvfiles",
+							"fileName": "csvCor.csv",
+							"separatorName": ";"
+						}
+					},
+					"fieldList": [
+						"itemName"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "adf_02_activities"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-08-14T20:49:05Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

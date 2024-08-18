@@ -1,0 +1,9 @@
+{
+	"name": "adf-dataproject-labs",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "7bfcd0eb-f7eb-4c4e-bd0f-755b0e909db8",
+		"tenantId": "3f9709e8-19c0-4d54-84ff-cb842797826f"
+	}
+}

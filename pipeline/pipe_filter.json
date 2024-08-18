@@ -1,0 +1,71 @@
+{
+	"name": "pipe_filter",
+	"properties": {
+		"activities": [
+			{
+				"name": "Filter_Metadata",
+				"type": "Filter",
+				"dependsOn": [
+					{
+						"activity": "metadata",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('metadata').output.childItems",
+						"type": "Expression"
+					},
+					"condition": {
+						"value": "@startswith(item().name,'C')",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "metadata",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_generico_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"containerName": "csvfiles",
+							"fileName": "*.csv",
+							"separatorName": ";"
+						}
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			}
+		],
+		"folder": {
+			"name": "adf_02_activities"
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-08-14T21:17:51Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
