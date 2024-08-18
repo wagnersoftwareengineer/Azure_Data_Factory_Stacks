@@ -92,8 +92,8 @@
 						"referenceName": "ds_generico_CSV",
 						"type": "DatasetReference",
 						"parameters": {
-							"containerName": "csvfiles/Copiados/",
-							"fileName": "*.csv",
+							"containerName": "csvfiles/Copiados",
+							"fileName": "ProdutosGeral_Transformado.csv",
 							"separatorName": ";"
 						}
 					},
