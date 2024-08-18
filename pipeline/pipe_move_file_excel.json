@@ -86,7 +86,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"containerName": "csvfiles/Copiados/",
-							"fileName": "ProdutosGeral.CSV",
+							"fileName": "ProdutosGeral_Transformado.CSV",
 							"separatorName": ";"
 						}
 					},
