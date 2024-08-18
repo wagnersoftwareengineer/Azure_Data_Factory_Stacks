@@ -71,7 +71,14 @@
 			{
 				"name": "Deletar Arquivo Copiado",
 				"type": "Delete",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Copiar XLSX to CSV",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -86,7 +93,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"containerName": "csvfiles/Copiados/",
-							"fileName": "ProdutosGeral_Transformado.CSV",
+							"fileName": "*.csv",
 							"separatorName": ";"
 						}
 					},
