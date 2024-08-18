@@ -1,0 +1,45 @@
+{
+	"name": "ds_generico_excel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DataLakeAccount",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"fileName": {
+				"type": "string",
+				"defaultValue": "ProdutosGeral.xlsx"
+			},
+			"fileSeparator": {
+				"type": "string",
+				"defaultValue": ";"
+			}
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Planilha1",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "ProdutosGeral.xlsx",
+				"fileSystem": "excelfiles"
+			},
+			"range": "",
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "produto",
+				"type": "String"
+			},
+			{
+				"name": "descricao",
+				"type": "String"
+			},
+			{
+				"name": "classificacao",
+				"type": "String"
+			}
+		]
+	}
+}
