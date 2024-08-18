@@ -1,0 +1,32 @@
+{
+	"name": "ds_generico_excel",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_DataLakeAccount",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"fileName": {
+				"type": "string",
+				"defaultValue": "*.xlsx"
+			},
+			"fileSeparator": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": {
+				"value": "@dataset().fileName",
+				"type": "Expression"
+			},
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "excelfiles"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": []
+	}
+}
