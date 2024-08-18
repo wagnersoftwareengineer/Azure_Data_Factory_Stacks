@@ -1,0 +1,20 @@
+{
+	"name": "pipe_git_01",
+	"properties": {
+		"activities": [
+			{
+				"name": "Wait_git",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 2
+				}
+			}
+		],
+		"folder": {
+			"name": "adf_04_git"
+		},
+		"annotations": []
+	}
+}
