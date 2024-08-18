@@ -51,7 +51,7 @@
 						"referenceName": "ds_generico_excel",
 						"type": "DatasetReference",
 						"parameters": {
-							"fileName": "excelfiles",
+							"fileName": "ProdutosGeral.xlsx",
 							"fileSeparator": ";"
 						}
 					}
@@ -62,7 +62,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"containerName": "csvfiles/Copiados",
-							"fileName": "*.csv",
+							"fileName": "ProdutosGeral_Transformado.csv",
 							"separatorName": ";"
 						}
 					}
