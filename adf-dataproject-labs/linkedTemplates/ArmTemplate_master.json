@@ -31,6 +31,10 @@
 			"type": "string",
 			"defaultValue": "https://dlsdataprojectlabs.dfs.core.windows.net/"
 		},
+		"AzureKeyVault_Storage_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://adfdatafactorylabs.vault.azure.net/"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -75,6 +79,9 @@
 					},
 					"LS_DataLakeAccount_properties_typeProperties_url": {
 						"value": "[parameters('LS_DataLakeAccount_properties_typeProperties_url')]"
+					},
+					"AzureKeyVault_Storage_properties_typeProperties_baseUrl": {
+						"value": "[parameters('AzureKeyVault_Storage_properties_typeProperties_baseUrl')]"
 					}
 				}
 			},

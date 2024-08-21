@@ -22,6 +22,9 @@
 		},
 		"LS_DataLakeAccount_properties_typeProperties_url": {
 			"value": "https://dlsdataprojectlabs.dfs.core.windows.net/"
+		},
+		"AzureKeyVault_Storage_properties_typeProperties_baseUrl": {
+			"value": "https://adfdatafactorylabs.vault.azure.net/"
 		}
 	}
 }
