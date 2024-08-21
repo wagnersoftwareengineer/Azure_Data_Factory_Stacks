@@ -1,0 +1,10 @@
+{
+	"name": "AzureKeyVault_Storage",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://adfdatafactorylabs.vault.azure.net/"
+		}
+	}
+}
