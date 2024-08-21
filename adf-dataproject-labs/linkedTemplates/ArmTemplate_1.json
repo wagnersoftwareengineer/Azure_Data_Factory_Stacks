@@ -13,6 +13,255 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/pipe_sql_to_parquet_pratica03')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Dados Tabela",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"sqlReaderQuery": "SELECT TABLE_SCHEMA, TABLE_NAME\nFROM INFORMATION_SCHEMA.TABLES \n  WHERE TABLE_TYPE='BASE TABLE'\n  and TABLE_SCHEMA = 'SalesLT'",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "ds_generico_azuresql",
+								"type": "DatasetReference",
+								"parameters": {
+									"schemaName": "*",
+									"tableName": "*"
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "Filtrados",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Dados Tabela",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Dados Tabela').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Copy_Dados_To_Parquet",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"parallelCopies": 1,
+										"dataIntegrationUnits": 4,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "ds_generico_azuresql",
+											"type": "DatasetReference",
+											"parameters": {
+												"schemaName": {
+													"value": "@item().TABLE_SCHEMA",
+													"type": "Expression"
+												},
+												"tableName": {
+													"value": "@item().TABLE_NAME",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "ds_generico_parquet",
+											"type": "DatasetReference",
+											"parameters": {
+												"containerName": "parquetfiles/TABLE_SQL/",
+												"fileName": {
+													"value": "@item().TABLE_NAME",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "adf_03_handson01"
+				},
+				"annotations": [],
+				"lastPublishTime": "2024-08-16T14:06:00Z"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipe_wait')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "esperar_10_segundos",
+						"type": "Wait",
+						"dependsOn": [
+							{
+								"activity": "metadata",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"waitTimeInSeconds": 10
+						}
+					},
+					{
+						"name": "Lookup_CSV",
+						"type": "Lookup",
+						"dependsOn": [
+							{
+								"activity": "esperar_10_segundos",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "DelimitedTextSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								},
+								"formatSettings": {
+									"type": "DelimitedTextReadSettings"
+								}
+							},
+							"dataset": {
+								"referenceName": "ds_generico_CSV",
+								"type": "DatasetReference",
+								"parameters": {
+									"containerName": "csvfiles",
+									"fileName": "csvCor.csv",
+									"separatorName": ";"
+								}
+							}
+						}
+					},
+					{
+						"name": "metadata",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "ds_generico_CSV",
+								"type": "DatasetReference",
+								"parameters": {
+									"containerName": "csvfiles",
+									"fileName": "csvCor.csv",
+									"separatorName": ";"
+								}
+							},
+							"fieldList": [
+								"itemName"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"folder": {
+					"name": "adf_02_activities"
+				},
+				"annotations": [],
+				"lastPublishTime": "2024-08-14T20:49:05Z"
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/pipe_executepipeline')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -93,7 +342,9 @@
 				"annotations": [],
 				"lastPublishTime": "2024-08-15T16:53:19Z"
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/pipe_wait')]"
+			]
 		}
 	]
 }
